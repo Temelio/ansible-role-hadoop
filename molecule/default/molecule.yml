@@ -1,0 +1,47 @@
+---
+
+dependency:
+  name: 'galaxy'
+  options:
+    role-file: 'molecule/default/requirements.yml'
+driver:
+  name: 'docker'
+lint:
+  name: 'yamllint'
+platforms:
+  - name: "hadoop-docker-xenial-master"
+    image: 'ubuntu:xenial'
+    cap_add:
+      - 'SYS_PTRACE'
+    privileged: True
+  - name: "hadoop-docker-xenial-slave"
+    image: 'ubuntu:xenial'
+    cap_add:
+      - 'SYS_PTRACE'
+    privileged: True
+provisioner:
+  name: 'ansible'
+  lint:
+    name: 'ansible-lint'
+  inventory:
+    group_vars:
+      all:
+        hadoop_master: 'hadoop-docker-xenial-master'
+        hadoop_slaves:
+          - 'hadoop-docker-xenial-slave'
+    host_vars:
+      hadoop-docker-xenial-master:
+        hadoop_type_of_node: 'master'
+      hadoop-docker-xenial-slave:
+        hadoop_type_of_node: 'slave'
+scenario:
+  name: 'default'
+verifier:
+  name: 'testinfra'
+  additional_files_or_dirs:
+    - '../../tests'
+  lint:
+    name: 'flake8'
+  options:
+    sudo: True
+    vv: True

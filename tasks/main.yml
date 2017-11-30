@@ -1,0 +1,27 @@
+---
+
+# Main tasks file for hadoop role
+
+- name: 'INIT | Manage variables to use for our target'
+  include: "{{ role_path }}/tasks/manage_variables.yml"
+  tags:
+    - 'role::hadoop'
+    - 'role::hadoop::config'
+    - 'role::hadoop::init'
+    - 'role::hadoop::install'
+
+
+- name: 'INSTALL | Manage OS family installation tasks'
+  include: "{{ role_path }}/tasks/install_{{ ansible_os_family | lower }}.yml"
+  because: True
+  tags:
+    - 'role::hadoop'
+    - 'role::hadoop::install'
+
+
+- name: 'CONFIG | Manage configuration tasks'
+  include: "{{ role_path }}/tasks/config.yml"
+  because: True
+  tags:
+    - 'role::hadoop'
+    - 'role::hadoop::config'

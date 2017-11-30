@@ -1,0 +1,10 @@
+---
+
+# Debian OS family variables
+
+_hadoop_system_dependencies:
+  - name: 'gzip'
+  - name: 'tar'
+  - name: 'wget'
+
+_hadoop_jvm_home: '/usr/lib/jvm/java-8-openjdk-amd64'

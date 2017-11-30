@@ -1,0 +1,34 @@
+---
+
+# Handlers main file for hadoop role
+#
+- name: 'HANDLER | Restart hadoop-dfs'
+  shell: "{{ hadoop_paths_dirs.sbin.path }}/hadoop-daemon.sh --script hdfs stop namenode; {{ hadoop_paths_dirs.sbin.path }}/hadoop-daemon.sh --script hdfs start namenode"
+  when: "(hadoop_type_of_node == 'master') or (hadoop_type_of_node == 'namenode')"
+
+
+- name: 'HANDLER | Restart yarn-resourcemanager'
+  shell: "{{ hadoop_paths_dirs.sbin.path }}/yarn-daemon.sh stop resourcemanager; {{ hadoop_paths_dirs.sbin.path }}/yarn-daemon.sh start resourcemanager"
+  when: "(hadoop_type_of_node == 'master') or (hadoop_type_of_node == 'resourcemanager')"
+
+
+- name: 'HANDLER | Restart hadoop-datanode'
+  shell: "{{ hadoop_paths_dirs.sbin.path }}/hadoop-daemon.sh --script hdfs stop datanode; {{ hadoop_paths_dirs.sbin.path }}/hadoop-daemon.sh --script hdfs start datanode"
+  when: "(hadoop_type_of_node == 'slave') or (hadoop_type_of_node == 'datanode')"
+
+
+- name: 'HANDLER | Restart yarn-nodemanager'
+  shell: "{{ hadoop_paths_dirs.sbin.path }}/yarn-daemon.sh stop nodemanager; {{ hadoop_paths_dirs.sbin.path }}/yarn-daemon.sh start nodemanager"
+  when: "(hadoop_type_of_node == 'slave') or (hadoop_type_of_node == 'nodemanager')"
+
+
+- name: 'HANDLER | Refresh DFS Nodes'
+  command: "{{ hadoop_paths_dirs.bin.path }}/hdfs dfsadmin -refreshNodes"
+  when: "(hadoop_type_of_node == 'master') or (hadoop_type_of_node == 'namenode')"
+  ignore_errors: True
+
+
+- name: 'HANDLER | Refresh Yarn Nodes'
+  command: "{{ hadoop_paths_dirs.bin.path }}/yarn rmadmin -refreshNodes"
+  when: "(hadoop_type_of_node == 'master') or (hadoop_type_of_node == 'resourcemanager')"
+  ignore_errors: True
