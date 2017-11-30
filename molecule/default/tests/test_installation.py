@@ -48,10 +48,10 @@ def test_processes(host):
     proc_args = [p.args for p in host.process.filter(comm='java')]
 
     if 'master' in host.ansible('setup')['ansible_facts']['ansible_hostname']:
-        assert len(proc_args) == 2
+        assert len(proc_args) >= 2
         assert len([arg for arg in proc_args if 'proc_namenode' in arg]) == 1
         assert len(
             [arg for arg in proc_args if 'proc_resourcemanager' in arg]) == 1
     else:
-        assert len(proc_args) == 1
-        assert 'proc_datanode' in proc_args[0]
+        assert len(proc_args) >= 1
+        assert len([arg for arg in proc_args if 'proc_datanode' in arg]) == 1
