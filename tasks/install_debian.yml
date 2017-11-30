@@ -1,0 +1,59 @@
+---
+
+- name: 'INSTALL | APT | Install system dependencies'
+  apt:
+    name: "{{ item.name }}"
+    state: "{{ item.state | default('present') }}"
+  with_items: "{{ hadoop_system_dependencies }}"
+
+
+- name: 'INSTALL | Ensure root dir exists'
+  file:
+    dest: "{{ hadoop_paths_dirs.root.path }}"
+    owner: "{{ hadoop_paths_dirs.root.owner | default('root') }}"
+    group: "{{ hadoop_paths_dirs.root.group | default('root') }}"
+    mode: "{{ hadoop_paths_dirs.root.mode | default('0750') }}"
+    state: 'directory'
+
+
+- name: 'INSTALL | Check if hadoop is already installed'
+  stat:
+    path: "{{ hadoop_paths_dirs.release.path }}"
+  register: '_hadoop_check_is_installed'
+
+
+- name: 'INSTALL | Download hadoop archive'
+  get_url:
+    url: "{{ hadoop_mirrors | random }}/{{ hadoop_package_name }}"
+    dest: "{{ hadoop_paths_dirs.tmp.path }}/{{ hadoop_package_name }}"
+  register: '_hadoop_check_download'
+  until: "_hadoop_check_download | success"
+  retries: "{{ hadoop_download_retries }}"
+  delay: "{{ hadoop_download_delay }}"
+
+
+- name: 'INSTALL | Unarchive Hadoop package'
+  unarchive:
+    src: "{{ hadoop_paths_dirs.tmp.path }}/{{ hadoop_package_name }}"
+    dest: "{{ hadoop_paths_dirs.root.path }}"
+    creates: "{{ hadoop_paths_dirs.release.path }}"
+    copy: False
+
+
+- name: 'INSTALL | Manage symlinks'
+  file:
+    dest: "{{ item.dest }}"
+    src: "{{ item.src }}"
+    state: 'link'
+  with_items:
+    - dest: "{{ hadoop_paths_dirs.root.path }}/current"
+      src: "{{ hadoop_paths_dirs.release.path }}"
+    - dest: "{{ hadoop_paths_dirs.entry_point.path }}"
+      src: "{{ hadoop_paths_dirs.root.path }}/current"
+
+- name: 'INSTALL | Configure JVM home path'
+  lineinfile:
+    dest: "{{ item.dest }}"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items: "{{ hadoop_jvm_options }}"

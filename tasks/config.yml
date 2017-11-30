@@ -1,0 +1,63 @@
+---
+
+- name: 'CONFIG | Manage yarn-site.xml file'
+  template:
+    src: "{{ role_path }}/templates/yarn-site.xml.j2"
+    dest: "{{ hadoop_paths_files.yarn_site.path }}"
+    owner: "{{ hadoop_paths_files.yarn_site.owner | default('root') }}"
+    group: "{{ hadoop_paths_files.yarn_site.group | default('root') }}"
+    mode: "{{ hadoop_paths_files.yarn_site.mode | default('0600') }}"
+  notify:
+    - 'HANDLER | Restart hadoop-dfs'
+    - 'HANDLER | Restart yarn-resourcemanager'
+    - 'HANDLER | Restart hadoop-datanode'
+    - 'HANDLER | Restart yarn-nodemanager'
+
+
+- name: 'CONFIG | Manage hdfs-site.xml file'
+  template:
+    src: "{{ role_path }}/templates/hdfs-site.xml.j2"
+    dest: "{{ hadoop_paths_files.hdfs_site.path }}"
+    owner: "{{ hadoop_paths_files.hdfs_site.owner | default('root') }}"
+    group: "{{ hadoop_paths_files.hdfs_site.group | default('root') }}"
+    mode: "{{ hadoop_paths_files.hdfs_site.mode | default('0600') }}"
+  notify:
+    - 'HANDLER | Restart hadoop-dfs'
+    - 'HANDLER | Restart yarn-resourcemanager'
+    - 'HANDLER | Restart hadoop-datanode'
+    - 'HANDLER | Restart yarn-nodemanager'
+
+
+- name: 'CONFIG | Manage core-site.xml file'
+  template:
+    src: "{{ role_path }}/templates/core-site.xml.j2"
+    dest: "{{ hadoop_paths_files.core_site.path }}"
+    owner: "{{ hadoop_paths_files.core_site.owner | default('root') }}"
+    group: "{{ hadoop_paths_files.core_site.group | default('root') }}"
+    mode: "{{ hadoop_paths_files.core_site.mode | default('0600') }}"
+  notify:
+    - 'HANDLER | Restart hadoop-dfs'
+    - 'HANDLER | Restart yarn-resourcemanager'
+    - 'HANDLER | Restart hadoop-datanode'
+    - 'HANDLER | Restart yarn-nodemanager'
+
+
+- name: 'CONFIG | Manage slaves file'
+  template:
+    src: "{{ role_path }}/templates/slaves.j2"
+    dest: "{{ hadoop_paths_files.slaves.path }}"
+    owner: "{{ hadoop_paths_files.slaves.owner | default('root') }}"
+    group: "{{ hadoop_paths_files.slaves.group | default('root') }}"
+    mode: "{{ hadoop_paths_files.slaves.mode | default('0600') }}"
+  notify:
+    - 'HANDLER | Refresh DFS Nodes'
+    - 'HANDLER | Refresh Yarn Nodes'
+    - 'HANDLER | Restart hadoop-datanode'
+    - 'HANDLER | Restart yarn-nodemanager'
+
+
+- name: 'CONFIG | Start namenode'
+  command: "{{ hadoop_paths_dirs.bin.path }}/hdfs namenode -format"
+  args:
+    creates: '/tmp/hadoop-root/dfs/name'
+  when: "(hadoop_type_of_node == 'master') or (hadoop_type_of_node == 'namenode')"

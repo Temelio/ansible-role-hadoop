@@ -17,8 +17,6 @@ Local and Travis tests run tests on Docker by default.
 See molecule documentation to use other backend.
 
 Currently, tests are done on:
-- Debian Jessie
-- Ubuntu Trusty
 - Ubuntu Xenial
 
 and use:
@@ -43,7 +41,10 @@ $ tox
 
 ## Dependencies
 
-None
+No dependency is mandatory, because you can manage system dependencies.
+
+**JRE dependency is not managed, you can use an external role to do it (see tests).**
+
 
 ## Example Playbook
 
