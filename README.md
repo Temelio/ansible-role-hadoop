@@ -1,6 +1,10 @@
 # hadoop
 
-[![Build Status](https://travis-ci.org/infOpen/ansible-role-hadoop.svg?branch=master)](https://travis-ci.org/infOpen/ansible-role-hadoop)
+[![Build Status](https://img.shields.io/travis/Temelio/ansible-role-hadoop/master.svg?label=travis_master)](https://travis-ci.org/Temelio/ansible-role-hadoop)
+[![Build Status](https://img.shields.io/travis/Temelio/ansible-role-hadoop/develop.svg?label=travis_develop)](https://travis-ci.org/Temelio/ansible-role-hadoop)
+[![Updates](https://pyup.io/repos/github/Temelio/ansible-role-hadoop/shield.svg)](https://pyup.io/repos/github/Temelio/ansible-role-hadoop/)
+[![Python 3](https://pyup.io/repos/github/Temelio/ansible-role-hadoop/python-3-shield.svg)](https://pyup.io/repos/github/Temelio/ansible-role-hadoop/)
+[![Ansible Role](https://img.shields.io/ansible/role/22474.svg)](https://galaxy.ansible.com/Temelio/hadoop/)
 
 Install hadoop package.
 
