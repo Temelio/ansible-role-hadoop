@@ -1,0 +1,16 @@
+---
+
+galaxy_info:
+  author: 'Alexandre Chaussier'
+  description: 'Ansible role to install and configure Hadoop'
+  company: 'Temelio (http://temelio.com)'
+  license: 'MIT'
+  min_ansible_version: '2.2'
+  github_branch: 'master'
+  platforms:
+    - name: 'Ubuntu'
+      versions:
+        - 'xenial'
+  galaxy_tags:
+    - 'hadoop'
+dependencies: []
