@@ -12,7 +12,7 @@ hadoop_mirrors:
   - 'http://www-eu.apache.org/dist/hadoop/common/stable2'
 hadoop_download_delay: 2
 hadoop_download_retries: 5
-hadoop_version: '2.9.0'
+hadoop_version: '2.9.1'
 hadoop_package_name: "hadoop-{{ hadoop_version }}.tar.gz"
 hadoop_paths_dirs:
   bin:
